@@ -1,0 +1,9 @@
+<!doctype html><meta charset="utf-8">
+<script>
+  if (location.pathname.endsWith('/menu.pdf')) {
+    location.replace(location.origin + '/#menu'); // senin HTML sayfan
+  } else {
+    location.replace(location.origin + '/');      // diğer 404'ler ana sayfaya
+  }
+</script>
+<noscript><meta http-equiv="refresh" content="0;url=/#menu"></noscript>
