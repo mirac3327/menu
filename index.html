@@ -119,6 +119,9 @@
     /* Tiny shimmer separators */
     .spark{ height:2px; background: linear-gradient(90deg, transparent, rgba(212,175,55,.8), transparent); filter:blur(.4px); margin: 16px 0; }
     .logo img{height:clamp(36px,5vw,64px);width:auto;display:block}
+    .nav-links .icon{display:grid;place-items:center;width:38px;height:38px;padding:0;border-radius:999px;border:1px solid rgba(229,198,97,.35)}
+    .nav-links .icon svg{width:20px;height:20px;fill:none;stroke:var(--gold);stroke-width:1.6}
+    .nav-links .icon:hover{background:linear-gradient(180deg,rgba(212,175,55,.16),rgba(212,175,55,.03));box-shadow:0 6px 18px rgba(212,175,55,.18)}
 
   
   </style>
@@ -127,13 +130,17 @@
   <header class="nav">
     <div class="nav-wrap">
         <a class="logo" href="#top"><img src="images/logo1.jpeg" alt="Hançerlioğlu Katmer & Künefe"></a>
-      <nav class="nav-links">
-        <a href="#katmer">Katmer</a>
-        <a href="#kunefe">Künefe</a>
-        <a href="#kadayif">Kadayıf</a>
-        <a href="#dondurma">Dondurma</a>
-        <a href="#icecek">İçecek</a>
-      </nav>
+<nav class="nav-links">
+  <a href="#katmer">Katmer</a>
+  <a href="#kunefe">Künefe</a>
+  <a href="#kadayif">Kadayıf</a>
+  <a href="#dondurma">Dondurma</a>
+  <a href="#icecek">İçecek</a>
+  <a class="icon ig" href="https://www.instagram.com/hancerlioglukatmer/" target="_blank" rel="noopener" aria-label="Instagram">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4.5"></circle><circle cx="17.5" cy="6.5" r="1.3"></circle></svg>
+  </a>
+</nav>
+
     </div>
   </header>
 
@@ -156,11 +163,11 @@
       <article class="card" style="--card-img:url('images/klasikatmer.jpeg')"><h3>Klasik Katmer</h3><div class="spark"></div><div class="price">600₺</div><p class="note">Tek kişilik</p></article>
 
       <article class="card" style="--card-img:url('images/muska.jpeg')"><h3>Muska Katmer</h3><div class="spark"></div><div class="price">280₺</div><p class="note">Tek kişilik</p></article>
-      <article class="card" style="--card-img:url('images/muskaç.jpeg')"><h3>Çikolatalı Muska Katmer</h3><div class="spark"></div><div class="price">290₺</div></article>
+      <article class="card" style="--card-img:url('images/muskac.jpeg')"><h3>Çikolatalı Muska Katmer</h3><div class="spark"></div><div class="price">290₺</div></article>
       <article class="card" style="--card-img:url('images/muska.jpeg')"><h3>Kaymaklı Muska Katmer</h3><div class="spark"></div><div class="price">330₺</div></article>
-      <article class="card" style="--card-img:url('images/muskaç.webp')"><h3>Çikolatalı Kaymaklı Muska Katmer</h3><div class="spark"></div><div class="price">330₺</div></article>
+      <article class="card" style="--card-img:url('images/muskac.jpeg')"><h3>Çikolatalı Kaymaklı Muska Katmer</h3><div class="spark"></div><div class="price">330₺</div></article>
 
-      <article class="card" style="--card-img:url('images/burmaç.jpeg')"><h3>Burma Katmer – Çikolatalı</h3><div class="spark"></div><div class="price">790₺</div></article>
+      <article class="card" style="--card-img:url('images/burmac.jpeg')"><h3>Burma Katmer – Çikolatalı</h3><div class="spark"></div><div class="price">790₺</div></article>
       <article class="card" style="--card-img:url('images/burma2.jpeg')"><h3>Burma Katmer – Kaymaklı</h3><div class="spark"></div><div class="price">850₺</div></article>
       <article class="card" style="--card-img:url('images/burma3.jpeg')"><h3>Burma Katmer – Çikolatalı Kaymaklı</h3><div class="spark"></div><div class="price">850₺</div></article>
 
@@ -175,14 +182,14 @@
     <span class="badge">Künefeler</span>
     <div class="grid">
       <article class="card" style="--card-img:url('images/klasik.jpeg')"><h3>Klasik Künefe</h3><div class="spark"></div><div class="price">250₺</div><p class="note">Tek kişilik</p></article>
-      <article class="card" style="--card-img:url('images/placeholder.webp')"><h3>Hasır Künefe</h3><div class="spark"></div><div class="price">—</div><p class="note">Tek kişilik (fiyat PDF'de belirtilmemiş)</p></article>
+      <article class="card" style="--card-img:url('images/placeholder.webp')"><h3>Hasır Künefe</h3><div class="spark"></div><div class="price">300₺</div><p class="note">Tek kişilik</p></article>
 
       <article class="card" style="--card-img:url('images/klasik2.jpeg')"><h3>Klasik Künefe</h3><div class="spark"></div><div class="price">470₺ / 890₺</div><p class="note">İki / Dört kişilik</p></article>
       <article class="card" style="--card-img:url('images/placeholder.webp')"><h3>Hasır Künefe</h3><div class="spark"></div><div class="price">540₺ / 1020₺</div><p class="note">İki / Dört kişilik</p></article>
-      <article class="card" style="--card-img:url('images/paşa.jpeg')"><h3>Paşa Künefe</h3><div class="spark"></div><div class="price">540₺ / 950₺</div><p class="note">İki / Dört kişilik</p></article>
+      <article class="card" style="--card-img:url('images/pasa.jpeg')"><h3>Paşa Künefe</h3><div class="spark"></div><div class="price">540₺ / 950₺</div><p class="note">İki / Dört kişilik</p></article>
       <article class="card" style="--card-img:url('images/billuriye.jpeg')"><h3>Billuriye</h3><div class="spark"></div><div class="price">650₺ / 1.240₺</div><p class="note">İki / Dört kişilik</p></article>
       <article class="card" style="--card-img:url('images/billurzade.jpeg')"><h3>Billurzade</h3><div class="spark"></div><div class="price">650₺ / 1.240₺</div><p class="note">İki / Dört kişilik</p></article>
-      <article class="card" style="--card-img:url('images/fıstıkzade.jpeg')"><h3>Fıstıkzade Künefe</h3><div class="spark"></div><div class="price">300₺</div><p class="note">Tek kişilik</p></article>
+      <article class="card" style="--card-img:url('images/fistikzade.jpeg')"><h3>Fıstıkzade Künefe</h3><div class="spark"></div><div class="price">300₺</div><p class="note">Tek kişilik</p></article>
       <article class="card" style="--card-img:url('images/placeholder.webp')"><h3>Yarım Fıstıkzade & Yarım Hasır</h3><div class="spark"></div><div class="price">650₺ / 1.240₺</div><p class="note">İki / Dört kişilik</p></article>
       <article class="card" style="--card-img:url('images/placeholder.webp')"><h3>Burger Künefe</h3><div class="spark"></div><div class="price">730₺</div><p class="note">2 kişilik</p></article>
     </div>
@@ -201,13 +208,13 @@
   <section id="dondurma" class="container">
     <span class="badge">Dondurmalar</span>
     <div class="grid">
-      <article class="card" style="--card-img:url('images/placeholder.webp')"><h3>Sade Dilim Dondurma</h3><div class="spark"></div><div class="price">70₺</div></article>
-      <article class="card" style="--card-img:url('images/placeholder.webp')"><h3>Sade Baton Dondurma (500gr)</h3><div class="spark"></div><div class="price">260₺</div><p class="note">Masaya servisimiz yoktur.</p></article>
-      <article class="card" style="--card-img:url('images/placeholder.webp')"><h3>Sade–Çilekli Baton Dondurma</h3><div class="spark"></div><div class="price">320₺</div></article>
-      <article class="card" style="--card-img:url('images/placeholder.webp')"><h3>Sade–Çikolatalı Baton Dondurma</h3><div class="spark"></div><div class="price">300₺</div></article>
-      <article class="card" style="--card-img:url('images/placeholder.webp')"><h3>Fıstıklı Baton Dondurma</h3><div class="spark"></div><div class="price">260₺</div></article>
-      <article class="card" style="--card-img:url('images/placeholder.webp')"><h3>Kol Dondurma (1kg)</h3><div class="spark"></div><div class="price">410₺</div><p class="note">Masaya servisimiz yoktur.</p></article>
-      <article class="card" style="--card-img:url('images/placeholder.webp')"><h3>Kesme Dilim Dondurma</h3><div class="spark"></div><div class="price">—</div><p class="note">(Fiyat PDF'de belirtilmemiş)</p></article>
+      <article class="card" style="--card-img:url('images/dondurma.png')"><h3>Sade Dilim Dondurma</h3><div class="spark"></div><div class="price">70₺</div></article>
+      <article class="card" style="--card-img:url('images/dondurma.png')"><h3>Sade Baton Dondurma (500gr)</h3><div class="spark"></div><div class="price">260₺</div><p class="note">Masaya servisimiz yoktur.</p></article>
+      <article class="card" style="--card-img:url('images/dondurma.png')"><h3>Sade–Çilekli Baton Dondurma</h3><div class="spark"></div><div class="price">320₺</div></article>
+      <article class="card" style="--card-img:url('images/dondurma.png')"><h3>Sade–Çikolatalı Baton Dondurma</h3><div class="spark"></div><div class="price">300₺</div></article>
+      <article class="card" style="--card-img:url('images/dondurma.png')"><h3>Fıstıklı Baton Dondurma</h3><div class="spark"></div><div class="price">260₺</div></article>
+      <article class="card" style="--card-img:url('images/dondurma.png')"><h3>Kol Dondurma (1kg)</h3><div class="spark"></div><div class="price">410₺</div><p class="note">Masaya servisimiz yoktur.</p></article>
+      <article class="card" style="--card-img:url('images/dondurma.png')"><h3>Kesme Dilim Dondurma</h3><div class="spark"></div><div class="price">—</div><p class="note"></p></article>
     </div>
   </section>
 
@@ -215,13 +222,13 @@
   <section id="icecek" class="container">
     <span class="badge">İçecekler</span>
     <div class="grid">
-      <article class="card" style="--card-img:url('images/placeholder.webp')"><h3>Coca-Cola</h3><div class="spark"></div><div class="price">50₺</div><p class="note">Soğuk</p></article>
-      <article class="card" style="--card-img:url('images/placeholder.webp')"><h3>Fanta</h3><div class="spark"></div><div class="price">50₺</div><p class="note">Soğuk</p></article>
-      <article class="card" style="--card-img:url('images/placeholder.webp')"><h3>Sprite</h3><div class="spark"></div><div class="price">50₺</div><p class="note">Soğuk</p></article>
-      <article class="card" style="--card-img:url('images/placeholder.webp')"><h3>Soda</h3><div class="spark"></div><div class="price">25₺</div><p class="note">Soğuk</p></article>
-      <article class="card" style="--card-img:url('images/placeholder.webp')"><h3>Su</h3><div class="spark"></div><div class="price">25₺</div><p class="note">Soğuk</p></article>
-      <article class="card" style="--card-img:url('images/placeholder.webp')"><h3>Türk Kahvesi</h3><div class="spark"></div><div class="price">80₺</div><p class="note">Sıcak</p></article>
-      <article class="card" style="--card-img:url('images/placeholder.webp')"><h3>Çay</h3><div class="spark"></div><div class="price">İkram</div><p class="note">Sıcak</p></article>
+      <article class="card" style="--card-img:url('images/cola.png')"><h3>Coca-Cola</h3><div class="spark"></div><div class="price">50₺</div><p class="note">Soğuk</p></article>
+      <article class="card" style="--card-img:url('images/fanta.png')"><h3>Fanta</h3><div class="spark"></div><div class="price">50₺</div><p class="note">Soğuk</p></article>
+      <article class="card" style="--card-img:url('images/sprite.png')"><h3>Sprite</h3><div class="spark"></div><div class="price">50₺</div><p class="note">Soğuk</p></article>
+      <article class="card" style="--card-img:url('images/soda.png')"><h3>Soda</h3><div class="spark"></div><div class="price">25₺</div><p class="note">Soğuk</p></article>
+      <article class="card" style="--card-img:url('images/su.png')"><h3>Su</h3><div class="spark"></div><div class="price">25₺</div><p class="note">Soğuk</p></article>
+      <article class="card" style="--card-img:url('images/kahve.png')"><h3>Türk Kahvesi</h3><div class="spark"></div><div class="price">80₺</div><p class="note">Sıcak</p></article>
+      <article class="card" style="--card-img:url('images/cay.png')"><h3>Çay</h3><div class="spark"></div><div class="price">İkram</div><p class="note">Sıcak</p></article>
     </div>
   </section>
 
@@ -229,7 +236,7 @@
     <div class="container">
       <div class="section-title"><h2>İletişim</h2><div class="divider"></div></div>
       <p class="muted">Adres & konum için haritayı açın:</p>
-      <p><a class="map" href="https://www.google.com/maps/place/data=!4m2!3m1!1s0x14d8631979be5fed:0xfa3dca151f59f62?sa=X&ved=1t:8290&ictx=111" target="_blank" rel="noopener">Google Haritalar</a></p>
+      <p><a class="map" href="https://maps.google.com/maps?hl=tr&gl=tr&um=1&ie=UTF-8&fb=1&sa=X&ftid=0x14d863d6aa5cb5a1:0xee5a86b6f844a737" target="_blank" rel="noopener">Google Haritalar</a></p>
       <p class="muted">© <span id="y"></span>Hançerlioğlu • Katmer & Künefe</p>
     </div>
   </footer>
