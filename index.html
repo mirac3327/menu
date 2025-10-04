@@ -619,14 +619,36 @@
       cursor: pointer;
     }
 
-    @media(max-width: 860px) {
+    @media (max-width: 860px) {
+
+      /* Kart yerine üstte görsel, altta metin olacak */
       .zoom-content {
-        grid-template-columns: 1fr;
-        max-height: 92vh;
+        display: flex;
+        flex-direction: column;
+        max-height: 92svh;
+        /* güvenli mobil yükseklik */
+        height: min(92svh, 100dvh);
+        /* iOS/Android barlarına uyum */
+        overflow: hidden;
+        /* içerideki scroll panelde */
       }
 
+      /* Görsel fazla yer kaplamasın */
+      .zoom-content .zoom-img {
+        max-height: 44svh;
+        /* ekranın ~yarısı */
+        width: 100%;
+        object-fit: cover;
+      }
+
+      /* Metin alanı kalan alanda kaydırılabilsin */
       .zoom-panel {
-        max-height: 42vh;
+        flex: 1;
+        overflow: auto;
+        padding-right: 6px;
+        padding-bottom: max(8px, env(safe-area-inset-bottom));
+        -webkit-overflow-scrolling: touch;
+        /* iOS momentum scroll */
       }
     }
   </style>
@@ -1351,6 +1373,7 @@
 
         // Aç
         zoom.removeAttribute('hidden');
+        document.documentElement.style.overflow = 'hidden';
         requestAnimationFrame(() => zoom.classList.add('open'));
       });
     });
@@ -1360,6 +1383,7 @@
       zoom.classList.remove('open');
       setTimeout(() => {
         zoom.setAttribute('hidden', '');
+        document.documentElement.style.overflow = '';
         zoomImg.src = '';
         zoomTitleEl.textContent = '';
         zoomDescEl.textContent = '';
