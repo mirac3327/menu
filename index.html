@@ -606,49 +606,72 @@
       margin: 0
     }
 
-    /* mevcut chip stilini kullanıyoruz */
+    /* Daha görünür ve büyük X butonu */
     .zoom-close {
       position: absolute;
-      top: 8px;
-      right: 8px;
-      border: 1px solid rgba(229, 198, 97, .35);
-      background: linear-gradient(180deg, rgba(212, 175, 55, .16), rgba(212, 175, 55, .03));
+      top: max(10px, env(safe-area-inset-top));
+      right: 10px;
+      z-index: 2;
+      /* içeriğin üstünde */
+      font-size: 18px;
+      /* X boyutu */
+      line-height: 1;
+      min-width: 44px;
+      /* rahat dokunma alanı (WCAG) */
+      min-height: 44px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(229, 198, 97, .55);
       color: #fff;
-      border-radius: 10px;
-      padding: 6px 10px;
       cursor: pointer;
+      background:
+        linear-gradient(180deg, rgba(12, 12, 15, .92), rgba(12, 12, 15, .66));
+      /* koyu arka plan */
+      box-shadow:
+        0 10px 24px rgba(0, 0, 0, .45),
+        inset 0 0 0 1px rgba(0, 0, 0, .35);
+      backdrop-filter: blur(4px);
+    }
+
+    .zoom-close:hover {
+      filter: brightness(1.08);
+      border-color: rgba(229, 198, 97, .75);
+    }
+
+    .zoom-close:focus-visible {
+      outline: 2px solid color-mix(in oklab, var(--gold) 80%, #fff 20%);
+      outline-offset: 2px;
     }
 
     @media (max-width: 860px) {
+      .zoom-close {
+        font-size: 20px;
+        /* mobilde biraz daha büyük */
+        right: 8px;
+      }
 
-      /* Kart yerine üstte görsel, altta metin olacak */
+      /* Mobil düzen – senin mevcut ayarlarınla uyumlu, dokunmayabilirsin.
+     Sadece referans için aynı blok bırakıldı. */
       .zoom-content {
         display: flex;
         flex-direction: column;
         max-height: 92svh;
-        /* güvenli mobil yükseklik */
         height: min(92svh, 100dvh);
-        /* iOS/Android barlarına uyum */
         overflow: hidden;
-        /* içerideki scroll panelde */
       }
 
-      /* Görsel fazla yer kaplamasın */
       .zoom-content .zoom-img {
         max-height: 44svh;
-        /* ekranın ~yarısı */
         width: 100%;
         object-fit: cover;
       }
 
-      /* Metin alanı kalan alanda kaydırılabilsin */
       .zoom-panel {
         flex: 1;
         overflow: auto;
         padding-right: 6px;
         padding-bottom: max(8px, env(safe-area-inset-bottom));
         -webkit-overflow-scrolling: touch;
-        /* iOS momentum scroll */
       }
     }
   </style>
@@ -1390,13 +1413,34 @@
         zoomTagsEl.innerHTML = '';
       }, 200);
     }
+
+    // --- Tıklama ile kapatma ---
+    // Artık sadece arka plana değil, zoom'un herhangi bir yerine tıklanınca kapanır
     zoom.addEventListener('click', (e) => {
-      if (e.target.classList.contains('zoom-backdrop')) closeZoom();
+      // Eğer gelecekte tıklanınca kapanmasın istediğin bir öğe varsa ona data-stay ekleyebilirsin
+      if (!e.target.closest('[data-stay]')) closeZoom();
     });
+
+    // Çarpı butonu
     zoomCloseBtn.addEventListener('click', closeZoom);
+
+    // Klavyeden ESC
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && !zoom.hasAttribute('hidden')) closeZoom();
     });
+
+    // --- Kaydırarak (swipe-down) kapatma, mobil UX için ---
+    let touchStartY = null;
+    zoom.addEventListener('touchstart', (e) => {
+      touchStartY = e.touches?.[0]?.clientY ?? null;
+    }, { passive: true });
+
+    zoom.addEventListener('touchend', (e) => {
+      if (touchStartY == null) return;
+      const dy = (e.changedTouches?.[0]?.clientY ?? touchStartY) - touchStartY;
+      if (dy > 80) closeZoom(); // 80px aşağı kaydırınca kapat
+      touchStartY = null;
+    }, { passive: true });
 
     function setLang(lang) {
       const isTR = lang === 'tr';
