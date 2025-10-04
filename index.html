@@ -532,6 +532,103 @@
         box-shadow: var(--shadow)
       }
     }
+
+    .lang-switch {
+      display: flex;
+      gap: 8px;
+      margin-left: 6px
+    }
+
+    .lang-btn {
+      background: linear-gradient(180deg, rgba(212, 175, 55, .16), rgba(212, 175, 55, .03));
+      border: 1px solid rgba(229, 198, 97, .35);
+      border-radius: 999px;
+      color: #fff;
+      padding: 8px 12px;
+      cursor: pointer
+    }
+
+    .lang-btn.active {
+      background: linear-gradient(180deg, rgba(212, 175, 55, .45), rgba(212, 175, 55, .10));
+      border-color: rgba(229, 198, 97, .6);
+      box-shadow: var(--shadow)
+    }
+
+    /* Zoom içeriği – görsel + metin */
+    .zoom-content {
+      position: relative;
+      max-width: 1100px;
+      width: min(92vw, 1100px);
+      max-height: 90vh;
+      display: grid;
+      grid-template-columns: 1.2fr .9fr;
+      gap: 18px;
+      padding: 16px;
+      border-radius: 22px;
+      border: 1px solid rgba(229, 198, 97, .55);
+      background: rgba(8, 8, 10, .6);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, .55), inset 0 0 0 1px rgba(0, 0, 0, .35);
+      animation: pop .18s cubic-bezier(.22, .8, .22, 1);
+      backdrop-filter: blur(6px);
+    }
+
+    .zoom-content .zoom-img {
+      width: 100%;
+      height: auto;
+      border-radius: 16px;
+      border: 1px solid rgba(229, 198, 97, .4);
+    }
+
+    .zoom-panel {
+      overflow: auto;
+      padding-right: 6px;
+    }
+
+    .zoom-title {
+      margin: 0 0 8px;
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      color: #fff;
+    }
+
+    .zoom-desc {
+      margin: 0 0 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .zoom-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .zoom-tags .chip {
+      margin: 0
+    }
+
+    /* mevcut chip stilini kullanıyoruz */
+    .zoom-close {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      border: 1px solid rgba(229, 198, 97, .35);
+      background: linear-gradient(180deg, rgba(212, 175, 55, .16), rgba(212, 175, 55, .03));
+      color: #fff;
+      border-radius: 10px;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+
+    @media(max-width: 860px) {
+      .zoom-content {
+        grid-template-columns: 1fr;
+        max-height: 92vh;
+      }
+
+      .zoom-panel {
+        max-height: 42vh;
+      }
+    }
   </style>
 </head>
 
@@ -561,6 +658,11 @@
             <circle cx="17.5" cy="6.5" r="1.3"></circle>
           </svg>
         </a>
+        <div class="lang-switch" role="group" aria-label="Language switch">
+          <button class="lang-btn active" data-lang="tr" aria-pressed="true">TR</button>
+          <button class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+
       </nav>
     </div>
   </header>
@@ -935,8 +1037,22 @@
   <!-- ZOOM OVERLAY -->
   <div id="zoom" class="zoom" hidden>
     <div class="zoom-backdrop"></div>
-    <img class="zoom-img" alt="">
+
+    <div class="zoom-content" role="dialog" aria-modal="true" aria-labelledby="zoom-title">
+      <button class="zoom-close" aria-label="Kapat">✕</button>
+
+      <img class="zoom-img" alt="">
+
+      <aside class="zoom-panel">
+        <h3 id="zoom-title" class="zoom-title"></h3>
+        <p class="zoom-desc"></p>
+
+        <!-- (opsiyonel) küçük rozetler -->
+        <div class="zoom-tags" hidden></div>
+      </aside>
+    </div>
   </div>
+
 
   <script>
     // Yıl
@@ -948,34 +1064,6 @@
     }, { threshold: .12 });
     document.querySelectorAll('.card').forEach(el => obs.observe(el));
 
-    // Zoom: kartın --card-img değerini al ve büyüt
-    const zoom = document.getElementById('zoom');
-    const zoomImg = zoom.querySelector('.zoom-img');
-
-    document.querySelectorAll('.card').forEach(card => {
-      card.addEventListener('click', () => {
-        const raw = getComputedStyle(card).getPropertyValue('--card-img').trim();
-        const m = raw.match(/url\((?:\"|')?(.*?)(?:\"|')?\)/);
-        const src = m && m[1] ? m[1] : null;
-        if (!src) return;
-        zoomImg.src = src;
-        zoomImg.alt = (card.querySelector('h3')?.textContent || '').trim();
-        zoom.removeAttribute('hidden');
-        requestAnimationFrame(() => zoom.classList.add('open'));
-      });
-    });
-
-    // Kapatma: arka plana tıkla veya ESC
-    zoom.addEventListener('click', () => {
-      zoom.classList.remove('open');
-      setTimeout(() => zoom.setAttribute('hidden', ''), 200);
-    });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !zoom.hasAttribute('hidden')) {
-        zoom.classList.remove('open');
-        setTimeout(() => zoom.setAttribute('hidden', ''), 200);
-      }
-    });
     // Google Sheets "Web’de yayımla → CSV" linkini buraya yapıştır:
     const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQJcDlx7JIG5bYwSTTa_p2RdJ3qURSbYxKqHTemmA1r_zgCN81qOk0udWd7KFnPvBcEMuH6KKLYlilS/pub?output=csv';
 
@@ -1023,7 +1111,7 @@
           if (key && fiyat) priceByKey.set(key, fiyat);
         }
 
-        // Sadece bu bölümlerdeki kartların fiyatını güncelle
+        // Kartların fiyatını güncelle
         document.querySelectorAll('#katmer .card, #kunefe .card, #kadayif .card, #dondurma .card, #icecek .card')
           .forEach(card => {
             const name = (card.querySelector('h3')?.textContent || '').trim();
@@ -1040,10 +1128,396 @@
 
     // Sayfa açılınca çek
     document.addEventListener('DOMContentLoaded', syncPrices);
-    // İstersen periyodik tazele (ör. 10 dk)
-    // setInterval(syncPrices, 10*60*1000);
+    // setInterval(syncPrices, 10*60*1000); // istersen periyodik tazele
 
+    // --- Basit i18n (TR/EN) ---
+    const i18n = {
+      tr: {
+        _metaTitle: "Hançerlioglu Katmer Künefe – Menü",
+        _metaDesc: "Hançerlioglu Katmer Künefe: Katmer, Künefe, Kadayıf, Dondurma ve İçecekler.",
+        nav_katmer: "Katmer", nav_kunefe: "Künefe", nav_kadayif: "Kadayıf", nav_dondurma: "Dondurma", nav_icecek: "İçecek",
+        hero_tag: "Katmerden künefeye, kadayıftan el yapımı dondurmaya… Şehrin en seçkin tatlılarını altın dokunuşlarla keşfedin.",
+        cta: "Menüyü Gör", menu_title: "Menümüz",
+        badge_katmer: "Katmerler", badge_kunefe: "Künefeler", badge_kadayif: "Kadayıflar", badge_dondurma: "Dondurmalar", badge_icecek: "İçecekler",
+        contact: "İletişim", open_map: "Adres & konum için haritayı açın:", hours: "Çalışma Saatleri", hours_value: "Her gün: 10:00 – 01:00",
+        pay_card: "Kart ile ödeme", pay_cash: "Nakit", pay_contactless: "Temassız", takeaway: "Paket servis var",
+        call_btn: "Ara", instagram: "Instagram", whatsapp: "WhatsApp",
+        note_single: "Tek kişilik", note_two_four: "İki / Dört kişilik", note_three: "Üç kişilik", hot: "Sıcak", cold: "Soğuk",
+        complimentary: "İkram"
+      },
+      en: {
+        _metaTitle: "Hançerlioglu Katmer Kunefe – Menu",
+        _metaDesc: "Hançerlioglu Katmer Kunefe: Katmer, Kunefe, Kadaif, Ice Cream and Drinks.",
+        nav_katmer: "Katmer", nav_kunefe: "Kunefe", nav_kadayif: "Kadaif", nav_dondurma: "Ice Cream", nav_icecek: "Drinks",
+        hero_tag: "From katmer to kunefe, from kadaif to handmade ice cream… Discover the city’s finest desserts with a golden touch.",
+        cta: "View Menu", menu_title: "Our Menu",
+        badge_katmer: "Katmers", badge_kunefe: "Kunefes", badge_kadayif: "Kadaif Desserts", badge_dondurma: "Ice Creams", badge_icecek: "Drinks",
+        contact: "Contact", open_map: "Open map for address & location:", hours: "Opening Hours", hours_value: "Every day: 10:00 – 01:00",
+        pay_card: "Card payment", pay_cash: "Cash", pay_contactless: "Contactless", takeaway: "Takeaway available",
+        call_btn: "Call", instagram: "Instagram", whatsapp: "WhatsApp",
+        note_single: "Single serving", note_two_four: "for Two / Four", note_three: "for Three", hot: "Hot", cold: "Cold",
+        complimentary: "Complimentary",
+        items: {
+          "klasik-katmer": "Classic Katmer",
+          "muska-kaymakli": "Muska Katmer with Clotted Cream",
+          "muska-cikolatali": "Muska Katmer with Chocolate",
+          "muska-cikolatali-kaymakli": " Muska Katmer with  Chocolate & Clotted Cream",
+          "burma-kaymakli": "Burma Katmer with Clotted Cream",
+          "burma-cikolatali": "Burma Katmer with Chocolate",
+          "burma-cikolatali-kaymakli": "Burma Katmer with Chocolate & Clotted Cream",
+          "simit-cikolatali": "Simit Katmer with Chocolate",
+          "simit-kaymakli": "Simit Katmer with Clotted Cream",
+          "klasik-kunefe-tek": "Classic Kunefe",
+          "hasir-kunefe-tek": "Hasir Kunefe",
+          "klasik-kunefe-24": "Classic Kunefe",
+          "hasir-kunefe-24": "Hasir Kunefe",
+          "pasa-kunefe-24": "Pasha Kunefe",
+          "billuriye-24": "Billuriye",
+          "billurzade-24": "Billurzade",
+          "fistikzade-kunefe-24": "Fistikzade Kunefe",
+          "yarim-fistikzade-hasir-24": "Half Fistikzade & Half Hasir",
+          "burger-kunefe-2kisi": "Burger Kunefe (for Two)",
+          "fistikli-tel-kadayif-klasik": "Pistachio Tel Kadaif – Classic",
+          "hasir-kaymakli-kadayif": "Hasir Kaymaklı Kadaif",
+          "sade-dilim-dondurma": "Plain Slice Ice Cream",
+          "sade-baton-500gr": "Plain Baton Ice Cream (500g)",
+          "sade-cilekli-baton": "Plain–Strawberry Baton Ice Cream",
+          "sade-cikolatali-baton": "Plain–Chocolate Baton Ice Cream",
+          "fistikli-baton": "Pistachio Baton Ice Cream",
+          "kol-dondurma-1kg": "Tub Ice Cream (1kg)",
+          "coca-cola": "Coca-Cola", "fanta": "Fanta", "sprite": "Sprite", "soda": "Soda", "su": "Water",
+          "turk-kahvesi": "Turkish Coffee", "cay": "Tea"
+        }
+      }
+    };
+
+    // ——— ÜRÜN AÇIKLAMALARI (ilk 10) ———
+    const PRODUCT_INFO = {
+      "klasik-katmer": {
+        tr: "İncecik açılmış hamur, taze Antep fıstığı ve hafif şerbetle dengelenmiş klasik tat. Kıtır doku, hafif final.",
+        en: "Paper-thin pastry balanced with fresh pistachios and a light syrup. Crisp texture with a clean finish.",
+        tags: ["Antep fıstığı", "Hafif şerbet"]
+      },
+      "muska-kaymakli": {
+        tr: "Üçgen formda, bol kaymaklı ve çıtır katmanlı; ağızda dağılan yumuşak bir lezzet.",
+        en: "Triangular layers packed with clotted cream; crisp outside, melt-in-the-mouth inside.",
+        tags: ["Kaymak", "Kıtır doku"]
+      },
+      "muska-cikolatali": {
+        tr: "Klasik muskanın içine akışkan çikolata dokunuşu; kıtır hamurla yoğun kakaonun buluşması.",
+        en: "A molten chocolate twist on the classic muska; cocoa richness meets a crisp shell.",
+        tags: ["Çikolata", "Yoğun aroma"]
+      },
+      "muska-cikolatali-kaymakli": {
+        tr: "Kaymağın ipeksi dokusu ile çikolatanın aroması aynı lokmada; dengeli, tatmin edici.",
+        en: "Silky cream and rich chocolate in one bite; balanced and satisfying.",
+        tags: ["Kaymak", "Çikolata"]
+      },
+      "burma-kaymakli": {
+        tr: "Tel tel sarılmış hamur arasında bol kaymak; hafif şerbetle kıtır-yumuşak bir kontrast.",
+        en: "Rolled strands of pastry around generous cream; light syrup for a crisp-soft contrast.",
+        tags: ["Paylaşımlık", "Kaymak"]
+      },
+      "burma-cikolatali": {
+        tr: "Burma formunda çikolata dolgusu; ılık servisle aroması belirginleşir.",
+        en: "Chocolate-filled burma; served warm to bring out the aroma.",
+        tags: ["Çikolata", "Ilık servis"]
+      },
+      "burma-cikolatali-kaymakli": {
+        tr: "Çikolata ve kaymak bir arada; burmanın kıtır katmanlarıyla zengin bir denge.",
+        en: "Chocolate meets cream within burma’s crispy layers for a rich, rounded balance.",
+        tags: ["Çikolata", "Kaymak", "Zengin"]
+      },
+      "simit-cikolatali": {
+        tr: "Simit formunda katmer; dışı kıtır, içi çikolatalı—paylaşması keyifli.",
+        en: "Ring-shaped katmer with a chocolate core; crisp outside, perfect for sharing.",
+        tags: ["Paylaşımlık", "Çikolata"]
+      },
+      "simit-kaymakli": {
+        tr: "Simit biçimli katmerde bol kaymak; hafif şerbet ve fıstıkla dengelenir.",
+        en: "Ring-shaped katmer layered with cream; balanced by light syrup and pistachio.",
+        tags: ["Kaymak", "Antep fıstığı"]
+      },
+      "klasik-kunefe-tek": {
+        tr: "Tel kadayıf, peynir ve taze şerbet üçlüsü; sıcak servisle uzayan peynir keyfi.",
+        en: "Shredded kadaif with cheese and fresh syrup; served hot for that signature cheese stretch.",
+        tags: ["Sıcak servis", "Peynir"]
+      },
+      // --- Kalan Künefeler ---
+      "hasir-kunefe-tek": {
+        tr: "Tel kadayıfın hasır örgü formu sayesinde ekstra kıtır doku; peynir ve taze şerbetle dengeli tat.",
+        en: "Woven-style kadaif for extra crunch; balanced with cheese and fresh syrup.",
+        tags: ["Kıtır doku", "Tek kişilik"]
+      },
+      "klasik-kunefe-24": {
+        tr: "Klasik tarifin paylaşmalık boyu: uzayan peynir, taze şerbet ve nar gibi kızarmış tel kadayıf.",
+        en: "The classic in a sharing size: stretchy cheese, fresh syrup, and golden-baked kadaif.",
+        tags: ["Paylaşımlık", "Peynir"]
+      },
+      "hasir-kunefe-24": {
+        tr: "Hasır örgü kadayıfın daha belirgin kıtırlığı; paylaşımlık sunumda dengeli şerbet ve peynir.",
+        en: "Woven kadaif with a pronounced crunch; balanced syrup and cheese in a sharing format.",
+        tags: ["Kıtır doku", "Paylaşımlık"]
+      },
+      "pasa-kunefe-24": {
+        tr: "Orta katmanda kaymak dokunuşu, üstte nar gibi kızarmış tel kadayıf ve fıstıkla zenginleşen lezzet.",
+        en: "Clotted cream in the middle, golden kadaif on top, enriched with pistachios.",
+        tags: ["Kaymak", "Paylaşımlık"]
+      },
+      "billuriye-24": {
+        tr: "İnce öğütülmüş fıstık ve hafif şerbetle daha ferah bir damak; çıtır dış, yumuşak iç.",
+        en: "Finely ground pistachios and a lighter syrup for a fresher profile; crisp outside, soft inside.",
+        tags: ["Antep fıstığı", "Hafif şerbet"]
+      },
+      "billurzade-24": {
+        tr: "Fıstık oranı yükseltilmiş, yoğun aromalı ve zengin sunumlu özel yorum.",
+        en: "Pistachio-forward, intensely aromatic, and richly presented specialty.",
+        tags: ["Bol fıstık", "Zengin"]
+      },
+      "fistikzade-kunefe-24": {
+        tr: "Fıstık lezzetinin öne çıktığı, dengeli şerbet ve uzayan peynirle tamamlanan paylaşmalık künefe.",
+        en: "Pistachio-led flavor, balanced syrup, and stretchy cheese—made for sharing.",
+        tags: ["Antep fıstığı", "Paylaşımlık"]
+      },
+      "yarim-fistikzade-hasir-24": {
+        tr: "Yarım Fıstıkzade & yarım Hasır: iki üslubu tek tepside deneyimleyin.",
+        en: "Half Fistikzade & half Hasir: two styles on one tray.",
+        tags: ["Karışık", "Paylaşımlık"]
+      },
+      "burger-kunefe-2kisi": {
+        tr: "Kat kat istiflenmiş sunum; dışı kıtır, içi uzayan peynir—iki kişi için ideal.",
+        en: "Stacked, ‘burger-style’ presentation; crisp shell, stretchy cheese—perfect for two.",
+        tags: ["İki kişilik", "Katmanlı"]
+      }
+
+
+    };
+
+    // ——— ZOOM elemanları + mantık ———
+    const zoom = document.getElementById('zoom');
+    const zoomImg = zoom.querySelector('.zoom-img');
+    const zoomTitleEl = zoom.querySelector('.zoom-title');
+    const zoomDescEl = zoom.querySelector('.zoom-desc');
+    const zoomTagsEl = zoom.querySelector('.zoom-tags');
+    const zoomCloseBtn = zoom.querySelector('.zoom-close');
+    let lastKey = null;
+
+    function currentLang() { return document.documentElement.getAttribute('lang') || 'tr'; }
+
+    // Kart tıklama: görsel + başlık + açıklama + tag
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', () => {
+        const raw = getComputedStyle(card).getPropertyValue('--card-img').trim();
+        const m = raw.match(/url\((?:\"|')?(.*?)(?:\"|')?\)/);
+        const src = m && m[1] ? m[1] : null;
+        if (!src) return;
+
+        const key = card.dataset.key || '';
+        lastKey = key;
+
+        // Görsel
+        zoomImg.src = src;
+
+        // Başlık
+        const lang = currentLang();
+        const h3 = card.querySelector('h3');
+        const trTitle = h3?.getAttribute('data-tr') || h3?.textContent || '';
+        const enTitle = (i18n.en.items || {})[key];
+        const title = (lang === 'en' && enTitle) ? enTitle : trTitle;
+        zoomTitleEl.textContent = title;
+        zoomImg.alt = title;
+
+        // Açıklama
+        const info = PRODUCT_INFO[key];
+        const desc = info ? (lang === 'en' ? (info.en || info.tr) : (info.tr || info.en)) : '';
+        zoomDescEl.textContent = desc || '';
+
+        // Rozetler
+        zoomTagsEl.innerHTML = '';
+        if (info && Array.isArray(info.tags) && info.tags.length) {
+          info.tags.forEach(t => {
+            const chip = document.createElement('span');
+            chip.className = 'chip';
+            chip.innerHTML = `
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="8"></circle>
+            </svg> ${t}`;
+            zoomTagsEl.appendChild(chip);
+          });
+          zoomTagsEl.hidden = false;
+        } else {
+          zoomTagsEl.hidden = true;
+        }
+
+        // Aç
+        zoom.removeAttribute('hidden');
+        requestAnimationFrame(() => zoom.classList.add('open'));
+      });
+    });
+
+    // Kapatma
+    function closeZoom() {
+      zoom.classList.remove('open');
+      setTimeout(() => {
+        zoom.setAttribute('hidden', '');
+        zoomImg.src = '';
+        zoomTitleEl.textContent = '';
+        zoomDescEl.textContent = '';
+        zoomTagsEl.innerHTML = '';
+      }, 200);
+    }
+    zoom.addEventListener('click', (e) => {
+      if (e.target.classList.contains('zoom-backdrop')) closeZoom();
+    });
+    zoomCloseBtn.addEventListener('click', closeZoom);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !zoom.hasAttribute('hidden')) closeZoom();
+    });
+
+    function setLang(lang) {
+      const isTR = lang === 'tr';
+      document.documentElement.setAttribute('lang', lang);
+
+      // <title> + meta description
+      document.title = i18n[lang]._metaTitle;
+      const meta = document.querySelector('meta[name="description"]');
+      if (meta) meta.setAttribute('content', i18n[lang]._metaDesc);
+
+      // NAV metinleri
+      const navLinks = document.querySelectorAll('.nav-links > a[href^="#"]');
+      if (navLinks[0]) navLinks[0].textContent = i18n[lang].nav_katmer;
+      if (navLinks[1]) navLinks[1].textContent = i18n[lang].nav_kunefe;
+      if (navLinks[2]) navLinks[2].textContent = i18n[lang].nav_kadayif;
+      if (navLinks[3]) navLinks[3].textContent = i18n[lang].nav_dondurma;
+      if (navLinks[4]) navLinks[4].textContent = i18n[lang].nav_icecek;
+
+      // Hero
+      const tag = document.querySelector('.hero .tag');
+      if (tag) tag.textContent = i18n[lang].hero_tag;
+      const cta = document.querySelector('.hero .cta');
+      if (cta) cta.textContent = i18n[lang].cta;
+
+      // Menü başlığı
+      const menuTitle = document.querySelector('#menu .section-title h2');
+      if (menuTitle) menuTitle.textContent = i18n[lang].menu_title;
+
+      // Badge’ler
+      const badgeMap = {
+        '#katmer .badge': 'badge_katmer',
+        '#kunefe .badge': 'badge_kunefe',
+        '#kadayif .badge': 'badge_kadayif',
+        '#dondurma .badge': 'badge_dondurma',
+        '#icecek .badge': 'badge_icecek'
+      };
+      Object.entries(badgeMap).forEach(([sel, key]) => {
+        const el = document.querySelector(sel);
+        if (el) el.textContent = i18n[lang][key];
+      });
+
+      // Not/etiket çevirileri
+      document.querySelectorAll('.note').forEach(n => {
+        const tr = n.getAttribute('data-tr') || n.textContent.trim();
+        if (!n.getAttribute('data-tr')) n.setAttribute('data-tr', tr);
+        if (isTR) { n.textContent = tr; return; }
+        if (tr === "Tek kişilik") n.textContent = i18n.en.note_single;
+        else if (tr === "İki / Dört kişilik") n.textContent = i18n.en.note_two_four;
+        else if (tr === "Üç kişilik") n.textContent = i18n.en.note_three;
+        else if (tr === "Soğuk") n.textContent = i18n.en.cold;
+        else if (tr === "Sıcak") n.textContent = i18n.en.hot;
+        else if (tr === "Masaya servisimiz yoktur.") n.textContent = "Table service not available.";
+      });
+
+      // "İkram" çevirisi
+      document.querySelectorAll('.price').forEach(p => {
+        const tr = p.getAttribute('data-tr') || p.textContent.trim();
+        if (!p.getAttribute('data-tr')) p.setAttribute('data-tr', tr);
+        p.textContent = isTR ? tr : (tr === "İkram" ? i18n.en.complimentary : tr);
+      });
+
+      // Kart başlıkları (data-key tabanlı)
+      document.querySelectorAll('.card[data-key]').forEach(card => {
+        const key = card.dataset.key;
+        const h3 = card.querySelector('h3');
+        if (!h3) return;
+        if (!h3.getAttribute('data-tr')) h3.setAttribute('data-tr', h3.textContent);
+        const enName = (i18n.en.items || {})[key];
+        if (!enName) return;
+        h3.textContent = isTR ? h3.getAttribute('data-tr') : enName;
+      });
+
+      // Footer başlık/metinleri
+      const contactTitle = document.querySelector('footer .section-title h2');
+      if (contactTitle) contactTitle.textContent = i18n[lang].contact;
+
+      const openMap = document.querySelector('.info-grid p.muted');
+      if (openMap) openMap.textContent = i18n[lang].open_map;
+
+      const hours = document.querySelectorAll('.info-grid div')[1];
+      if (hours) {
+        const ps = hours.querySelectorAll('p');
+        if (ps[0]) ps[0].textContent = i18n[lang].hours;
+        if (ps[1]) ps[1].textContent = i18n[lang].hours_value;
+      }
+
+      // Rozetler
+      const chips = Array.from(document.querySelectorAll('.chip'));
+      if (chips[0]) chips[0].lastChild.nodeValue = " " + i18n[lang].pay_card;
+      if (chips[1]) chips[1].lastChild.nodeValue = " " + i18n[lang].pay_cash;
+      if (chips[2]) chips[2].lastChild.nodeValue = " " + i18n[lang].pay_contactless;
+      if (chips[3]) chips[3].lastChild.nodeValue = " " + i18n[lang].takeaway;
+
+      // Buton aria/metinleri
+      const callBtn = document.querySelector('.fab-call');
+      if (callBtn) callBtn.textContent = i18n[lang].call_btn;
+      const telBtn = document.querySelector('a[href^="tel:"]');
+      if (telBtn) telBtn.setAttribute('aria-label', i18n[lang].call_btn);
+
+      // JSON-LD'ye inLanguage ekle
+      document.querySelectorAll('script[type="application/ld+json"]').forEach(s => {
+        try {
+          const data = JSON.parse(s.textContent);
+          data.inLanguage = Array.from(new Set([...(data.inLanguage || []), "tr", "en"]));
+          s.textContent = JSON.stringify(data);
+        } catch { }
+      });
+
+      // Aktif buton durumu
+      document.querySelectorAll('.lang-btn').forEach(b => {
+        const active = b.dataset.lang === lang;
+        b.classList.toggle('active', active);
+        b.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+
+      localStorage.setItem('lang', lang);
+
+      // — Dil değişince zoom içeriklerini canlı güncelle —
+      if (lastKey && !zoom.hasAttribute('hidden')) {
+        const card = document.querySelector(`.card[data-key="${lastKey}"]`);
+        if (card) {
+          const h3 = card.querySelector('h3');
+          const trTitle = h3?.getAttribute('data-tr') || h3?.textContent || '';
+          const enTitle = (i18n.en.items || {})[lastKey];
+          const title = (lang === 'en' && enTitle) ? enTitle : trTitle;
+          zoomTitleEl.textContent = title;
+          zoomImg.alt = title;
+
+          const info = PRODUCT_INFO[lastKey];
+          const desc = info ? (lang === 'en' ? (info.en || info.tr) : (info.tr || info.en)) : '';
+          zoomDescEl.textContent = desc || '';
+        }
+      }
+    }
+
+    // Başlangıç ve dil butonları
+    document.addEventListener('DOMContentLoaded', () => {
+      const saved = localStorage.getItem('lang') || 'tr';
+      setLang(saved);
+      document.querySelectorAll('.lang-btn').forEach(b => {
+        b.addEventListener('click', () => setLang(b.dataset.lang));
+      });
+    });
   </script>
+
 
   <script type="application/ld+json">
 {
