@@ -674,6 +674,94 @@
         -webkit-overflow-scrolling: touch;
       }
     }
+
+    /* --- ÇOKLU SEÇENEK (DAİRESEL RESİMLİ) --- */
+
+    /* 1. Kapsayıcı Kart Ayarları */
+    .card.multi-choice-wrapper {
+      /* Ana kartın solundaki boşluğu ve resmi kaldırıyoruz */
+      padding: 18px !important;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card.multi-choice-wrapper::after {
+      display: none !important;
+      /* Ana kartın büyük resmini gizle */
+    }
+
+    /* Sadece .multi-choice-wrapper içindeki h3 etiketini hedefliyoruz */
+    .card.multi-choice-wrapper h3 {
+      text-align: center;
+      /* Başlığı tam ortaya getirir */
+      padding-bottom: 8px;
+      /* Altındaki çizgi için boşluk */
+      /* Altına çizgi ekler */
+    }
+
+
+
+    /* 3. Mini Kart Yapısı (Satır) */
+    .mini-card {
+      position: relative;
+      padding-left: 74px;
+      /* Yuvarlak resim için soldan boşluk */
+      min-height: 60px;
+      /* Resim boyu kadar yükseklik */
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      border-radius: 12px;
+      padding-right: 10px;
+    }
+
+    .mini-card:hover {
+      background: rgba(255, 255, 255, 0.03);
+      /* Hover olunca hafif aydınlatma */
+    }
+
+    /* 4. Mini Yuvarlak Resim (Soldaki Daire) */
+    .mini-card::before {
+      content: "";
+      position: absolute;
+      left: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 54px;
+      /* Daire genişliği */
+      height: 54px;
+      /* Daire yüksekliği */
+      border-radius: 50%;
+
+      /* HTML'deki style="--mini-img:..."'den resmi alır */
+      background: var(--mini-img) center/cover no-repeat;
+
+      border: 1px solid rgba(229, 198, 97, .55);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    /* 5. Yazı ve Fiyat Alanı */
+    .mini-content h4 {
+      margin: 0 0 4px;
+      font-size: 0.95rem;
+      color: #f5f5f7;
+      font-weight: 600;
+    }
+
+    .mini-content .price {
+      font-size: 0.95rem;
+      /* Senin ana price rengini miras alır ama garanti olsun */
+      color: var(--gold-soft);
+    }
+
+    /* İki seçenek arasındaki ince çizgi */
+    .mini-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(229, 198, 97, .2), transparent);
+      width: 100%;
+    }
   </style>
 </head>
 
@@ -715,7 +803,7 @@
   <section class="hero" id="top">
     <div class="hero-inner">
       <h1 class="brand"><em>Hançerlioğlu</em> Katmer & Künefe</h1>
-      <p class="tag">Katmerden künefeye, kadayıftan el yapımı dondurmaya… Şehrin en seçkin tatlılarını altın
+      <p class="tag">Katmerden Künefeye, Baklavadan Kadayıfa… Şehrin en seçkin tatlılarını altın
         dokunuşlarla keşfedin.</p>
       <a class="cta" href="#menu">Menüyü Gör</a>
     </div>
@@ -757,20 +845,56 @@
         <div class="price"></div>
       </article>
 
-      <article class="card" data-key="burma-kaymakli" style="--card-img:url('images/burma3.jpeg')">
+      <article class="card multi-choice-wrapper">
+
         <h3>Burma Katmer – Kaymaklı</h3>
         <div class="spark"></div>
-        <div class="price"></div>
-        <p class="note">Tek / Üç kişilik</p>
-      </article>
 
-      <article class="card" data-key="burma-cikolatali" style="--card-img:url('images/burmac3.jpeg')">
+        <div class="choices-container">
+
+          <div class="mini-card" data-key="burma-kaymakli-tek" style="--mini-img:url('images/burma1.jpeg')">
+            <div class="mini-content">
+              <h4>Tek Kişilik</h4>
+              <div class="price"></div>
+            </div>
+          </div>
+
+          <div class="mini-divider"></div>
+
+          <div class="mini-card" data-key="burma-kaymakli-uc" style="--mini-img:url('images/burma3.jpeg')">
+            <div class="mini-content">
+              <h4>Üç Kişilik</h4>
+              <div class="price"></div>
+            </div>
+          </div>
+
+        </div>
+      </article>
+      <article class="card multi-choice-wrapper">
+
         <h3>Burma Katmer – Çikolatalı</h3>
         <div class="spark"></div>
-        <div class="price"></div>
-        <p class="note">Tek / Üç kişilik</p>
-      </article>
 
+        <div class="choices-container">
+
+          <div class="mini-card" data-key="burma-cikolatali-tek" style="--mini-img:url('images/burmac.jpeg')">
+            <div class="mini-content">
+              <h4>Tek Kişilik</h4>
+              <div class="price"></div>
+            </div>
+          </div>
+
+          <div class="mini-divider"></div>
+
+          <div class="mini-card" data-key="burma-cikolatali-uc" style="--mini-img:url('images/burmac3.jpeg')">
+            <div class="mini-content">
+              <h4>Üç Kişilik</h4>
+              <div class="price"></div>
+            </div>
+          </div>
+
+        </div>
+      </article>
       <article class="card" data-key="burma-cikolatali-kaymakli" style="--card-img:url('images/burmac3.jpeg')">
         <h3>Burma Katmer – Çikolatalı Kaymaklı</h3>
         <div class="spark"></div>
@@ -875,16 +999,30 @@
   <section id="kadayif" class="container">
     <span class="badge">Kadayıflar</span>
     <div class="grid">
-      <article class="card" data-key="fistikli-tel-kadayif-klasik" style="--card-img:url('images/placeholder.webp')">
+      <article class="card" data-key="fistikli-tel-kadayif-klasik" style="--card-img:url('images/kadaif2.jpeg')">
         <h3>Fıstıklı Tel Kadayıf – Klasik</h3>
         <div class="spark"></div>
         <div class="price"></div>
+        <p class="note">Porsiyon</p>
       </article>
 
-      <article class="card" data-key="hasir-kaymakli-kadayif" style="--card-img:url('images/placeholder.webp')">
+      <article class="card" data-key="hasir-kaymakli-kadayif" style="--card-img:url('images/kadaif.jpeg')">
         <h3>Hasır Kaymaklı Kadayıf</h3>
         <div class="spark"></div>
         <div class="price"></div>
+        <p class="note">Porsiyon</p>
+      </article>
+    </div>
+  </section>
+  <!-- BAKLAVA -->
+  <section id="baklava" class="container">
+    <span class="badge">Baklavalar</span>
+    <div class="grid">
+      <article class="card" data-key="fistikli-baklava" style="--card-img:url('images/baklava.jpeg')">
+        <h3>Fıstıklı Baklava</h3>
+        <div class="spark"></div>
+        <div class="price"></div>
+        <p class="note">Porsiyon</p>
       </article>
     </div>
   </section>
@@ -1157,9 +1295,13 @@
         }
 
         // Kartların fiyatını güncelle
-        document.querySelectorAll('#katmer .card, #kunefe .card, #kadayif .card, #dondurma .card, #icecek .card')
+        // 1. '.mini-card' sınıfını da ekliyoruz ki yeni kutuları da seçsin
+        document.querySelectorAll('.card, .mini-card')
           .forEach(card => {
-            const name = (card.querySelector('h3')?.textContent || '').trim();
+            // 2. 'h3, h4' yapıyoruz çünkü mini kartlarda başlık h4 etiketinde
+            const name = (card.querySelector('h3, h4')?.textContent || '').trim();
+
+            // Kodun geri kalanı AYNI kalacak
             const key = (card.dataset.key || '').trim() || slugifyTR(name);
             const yeni = priceByKey.get(key);
             if (!yeni) return;
@@ -1174,14 +1316,13 @@
     // Sayfa açılınca çek
     document.addEventListener('DOMContentLoaded', syncPrices);
     // setInterval(syncPrices, 10*60*1000); // istersen periyodik tazele
-
     // --- Basit i18n (TR/EN) ---
     const i18n = {
       tr: {
         _metaTitle: "Hançerlioglu Katmer Künefe – Menü",
         _metaDesc: "Hançerlioglu Katmer Künefe: Katmer, Künefe, Kadayıf, Dondurma ve İçecekler.",
         nav_katmer: "Katmer", nav_kunefe: "Künefe", nav_kadayif: "Kadayıf", nav_dondurma: "Dondurma", nav_icecek: "İçecek",
-        hero_tag: "Katmerden künefeye, kadayıftan el yapımı dondurmaya… Şehrin en seçkin tatlılarını altın dokunuşlarla keşfedin.",
+        hero_tag: " Katmerden Künefeye, Baklavadan Kadayıfa… Şehrin en seçkin tatlılarını altın dokunuşlarla keşfedin.",
         cta: "Menüyü Gör", menu_title: "Menümüz",
         badge_katmer: "Katmerler", badge_kunefe: "Künefeler", badge_kadayif: "Kadayıflar", badge_dondurma: "Dondurmalar", badge_icecek: "İçecekler",
         contact: "İletişim", open_map: "Adres & konum için haritayı açın:", hours: "Çalışma Saatleri", hours_value: "Her gün: 10:00 – 01:00",
@@ -1194,7 +1335,7 @@
         _metaTitle: "Hançerlioglu Katmer Kunefe – Menu",
         _metaDesc: "Hançerlioglu Katmer Kunefe: Katmer, Kunefe, Kadaif, Ice Cream and Drinks.",
         nav_katmer: "Katmer", nav_kunefe: "Kunefe", nav_kadayif: "Kadaif", nav_dondurma: "Ice Cream", nav_icecek: "Drinks",
-        hero_tag: "From katmer to kunefe, from kadaif to handmade ice cream… Discover the city’s finest desserts with a golden touch.",
+        hero_tag: "From katmer to kunefe, from baklava to kadaif… Discover the city’s finest desserts with a golden touch.",
         cta: "View Menu", menu_title: "Our Menu",
         badge_katmer: "Katmers", badge_kunefe: "Kunefes", badge_kadayif: "Kadaif Desserts", badge_dondurma: "Ice Creams", badge_icecek: "Drinks",
         contact: "Contact", open_map: "Open map for address & location:", hours: "Opening Hours", hours_value: "Every day: 10:00 – 01:00",
@@ -1241,98 +1382,98 @@
       "klasik-katmer": {
         tr: "İncecik açılmış hamur, taze Antep fıstığı ve kaymakla dengelenmiş klasik tat. Kıtır doku, hafif final.",
         en: "Paper-thin pastry balanced with fresh pistachios and clotted cream. Crisp texture with a clean finish.",
-        tags: ["Antep fıstığı", "Kaymak"]
       },
       "muska-kaymakli": {
         tr: "Üçgen formda, bol kaymaklı ve çıtır katmanlı; ağızda dağılan yumuşak bir lezzet.",
         en: "Triangular layers packed with clotted cream; crisp outside, melt-in-the-mouth inside.",
-        tags: ["Kaymak", "Kıtır doku"]
       },
       "muska-cikolatali": {
         tr: "Klasik muskanın içine akışkan çikolata dokunuşu; kıtır hamurla  kakaonun buluşması.",
         en: "A molten chocolate twist on the classic muska; cocoa richness meets a crisp shell.",
-        tags: ["Çikolata", "Kıtır doku"]
       },
       "muska-cikolatali-kaymakli": {
         tr: "Kaymağın ipeksi dokusu ile çikolatanın aroması aynı lokmada; dengeli, tatmin edici.",
         en: "Silky cream and rich chocolate in one bite; balanced and satisfying.",
-        tags: ["Kaymak", "Çikolata"]
       },
-      "burma-kaymakli": {
-        tr: "Tel tel sarılmış hamur arasında bol kaymak; kıtır-yumuşak bir kontrast.",
-        en: "Rolled strands of pastry around generous cream; light syrup for a crisp-soft contrast.",
-        tags: ["Paylaşımlık", "Kaymak"]
+      "burma-kaymakli-tek": {
+        tr: "Bol fıstıklı ve kaymaklı, tek kişilik özel porsiyon.",
+        en: "Single portion with lots of pistachio and clotted cream.",
       },
-      "burma-cikolatali": {
+      "burma-kaymakli-uc": {
+        tr: "Kalabalık sofralar için üç kişilik lezzet şöleni.",
+        tags: ["3 Kişilik", "Paylaşımlık"]
+      },
+      "burma-cikolatali-tek": {
         tr: "Burma formunda çikolata dolgusu; ılık servisle aroması belirginleşir.",
         en: "Chocolate-filled burma; served warm to bring out the aroma.",
-        tags: ["Çikolata", "Ilık servis"]
+      },
+      "burma-cikolatali-uc": {
+        tr: "Kalabalık sofralar için üç kişilik lezzet şöleni.",
+        tags: ["3 Kişilik", "Paylaşımlık"]
       },
       "burma-cikolatali-kaymakli": {
         tr: "Çikolata ve kaymak bir arada; burmanın kıtır katmanlarıyla zengin bir denge.",
         en: "Chocolate meets cream within burma’s crispy layers for a rich, rounded balance.",
-        tags: ["Çikolata", "Kaymak", "Zengin"]
+        tags: ["3 Kişilik", "Paylaşımlık"]
       },
       "simit-cikolatali": {
         tr: "Simit formunda katmer; dışı kıtır, içi çikolatalı—paylaşması keyifli.",
         en: "Ring-shaped katmer with a chocolate core; crisp outside, perfect for sharing.",
-        tags: ["Paylaşımlık", "Çikolata"]
+        tags: ["Paylaşımlık"]
       },
       "simit-kaymakli": {
         tr: "Simit biçimli katmerde bol kaymak ve fıstıkla dengelenir.",
         en: "Ring-shaped katmer layered with cream; balanced by light syrup and pistachio.",
-        tags: ["Kaymak", "Antep fıstığı"]
+        tags: ["Paylaşımlık"]
       },
       "klasik-kunefe-tek": {
         tr: "Tel kadayıf, peynir ve taze şerbet üçlüsü; sıcak servisle uzayan peynir keyfi.",
         en: "Shredded kadaif with cheese and fresh syrup; served hot for that signature cheese stretch.",
-        tags: ["Sıcak servis", "Peynir"]
       },
       // --- Kalan Künefeler ---
       "hasir-kunefe-tek": {
         tr: "Tel kadayıfın hasır örgü formu sayesinde ekstra kıtır doku; peynir ve taze şerbetle dengeli tat.",
         en: "Woven-style kadaif for extra crunch; balanced with cheese and fresh syrup.",
-        tags: ["Kıtır doku", "Tek kişilik"]
       },
       "klasik-kunefe-24": {
         tr: "Klasik tarifin paylaşmalık boyu: uzayan peynir, taze şerbet ve nar gibi kızarmış tel kadayıf.",
         en: "The classic in a sharing size: stretchy cheese, fresh syrup, and golden-baked kadaif.",
-        tags: ["Paylaşımlık", "Peynir"]
+        tags: ["Paylaşımlık"]
       },
       "hasir-kunefe-24": {
         tr: "Hasır örgü kadayıfın daha belirgin kıtırlığı; paylaşımlık sunumda dengeli şerbet ve peynir.",
         en: "Woven kadaif with a pronounced crunch; balanced syrup and cheese in a sharing format.",
-        tags: ["Kıtır doku", "Paylaşımlık"]
+        tags: ["Paylaşımlık"]
       },
       "pasa-kunefe-24": {
         tr: "Orta katmanda kaymak dokunuşu, üstte nar gibi kızarmış tel kadayıf ve fıstıkla zenginleşen lezzet.",
         en: "Clotted cream in the middle, golden kadaif on top, enriched with pistachios.",
-        tags: ["Kaymak", "Paylaşımlık"]
+        tags: ["Paylaşımlık"]
       },
       "billuriye-24": {
         tr: "İnce öğütülmüş fıstık ve hafif şerbetle daha ferah bir damak; çıtır dış, yumuşak iç.",
         en: "Finely ground pistachios and a lighter syrup for a fresher profile; crisp outside, soft inside.",
-        tags: ["Antep fıstığı", "Hafif şerbet"]
+        tags: ["Paylaşımlık"]
       },
       "billurzade-24": {
         tr: "Fıstık oranı yükseltilmiş, yoğun aromalı ve zengin sunumlu özel yorum.",
         en: "Pistachio-forward, intensely aromatic, and richly presented specialty.",
-        tags: ["Bol fıstık", "Zengin"]
+        tags: ["Paylaşımlık"]
       },
       "fistikzade-kunefe-24": {
         tr: "Fıstık lezzetinin öne çıktığı, dengeli şerbet ve uzayan peynirle tamamlanan paylaşmalık künefe.",
         en: "Pistachio-led flavor, balanced syrup, and stretchy cheese—made for sharing.",
-        tags: ["Antep fıstığı", "Paylaşımlık"]
+        tags: ["Paylaşımlık"]
       },
       "yarim-fistikzade-hasir-24": {
         tr: "Yarım Fıstıkzade & yarım Hasır: iki üslubu tek tepside deneyimleyin.",
         en: "Half Fistikzade & half Hasir: two styles on one tray.",
-        tags: ["Karışık", "Paylaşımlık"]
+        tags: ["Paylaşımlık"]
       },
       "burger-kunefe-2kisi": {
         tr: "Kat kat istiflenmiş sunum; dışı kıtır, içi uzayan peynir—iki kişi için ideal.",
         en: "Stacked, ‘burger-style’ presentation; crisp shell, stretchy cheese—perfect for two.",
-        tags: ["İki kişilik", "Katmanlı"]
+        tags: ["Paylaşımlık"]
       }
 
 
@@ -1400,7 +1541,82 @@
         requestAnimationFrame(() => zoom.classList.add('open'));
       });
     });
+    // ——— MINI KART (Seçenekli) Tıklama Mantığı ———
+    document.querySelectorAll('.mini-card').forEach(mini => {
+      mini.addEventListener('click', (e) => {
+        // 1. ÖNEMLİ: Tıklamanın ana karta (arkadaki karta) geçmesini engelle
+        e.stopPropagation();
 
+        // 2. Görseli --mini-img değişkeninden al
+        const raw = getComputedStyle(mini).getPropertyValue('--mini-img').trim();
+        const m = raw.match(/url\((?:\"|')?(.*?)(?:\"|')?\)/);
+        const src = m && m[1] ? m[1] : null;
+        if (!src) return;
+
+        // 3. Key'i al (CSV/Data eşleşmesi için)
+        const key = mini.dataset.key || '';
+        lastKey = key;
+
+        // 4. Görseli yerleştir
+        zoomImg.src = src;
+
+        // 5. Başlık Oluşturma (Ana Başlık + Alt Başlık)
+        const lang = currentLang();
+
+        // Üst karttaki ana başlığı bul
+        const mainCard = mini.closest('.card');
+        const mainH3 = mainCard.querySelector('h3');
+        // Mevcut dil mantığına göre ana başlığı seç
+        const mainTrTitle = mainH3?.getAttribute('data-tr') || mainH3?.textContent || '';
+        const mainEnTitle = (typeof i18n !== 'undefined' && i18n.en.items) ? i18n.en.items[mainCard.dataset.key] : null;
+        const mainTitleFinal = (lang === 'en' && mainEnTitle) ? mainEnTitle : mainTrTitle;
+
+        // Alt başlığı (Tek Kişilik / Üç Kişilik) al
+        const subTitle = mini.querySelector('h4').innerText;
+
+        // Başlıkları birleştir: "Burma Katmer (Tek Kişilik)"
+        const fullTitle = `${mainTitleFinal} (${subTitle})`;
+
+        zoomTitleEl.textContent = fullTitle;
+        zoomImg.alt = fullTitle;
+
+        // 6. Açıklama ve Etiketler (PRODUCT_INFO üzerinden)
+        // data-key="burma-kaymakli-tek" gibi anahtarlar PRODUCT_INFO'da varsa oradan çeker
+        const info = (typeof PRODUCT_INFO !== 'undefined') ? PRODUCT_INFO[key] : null;
+
+        const desc = info ? (lang === 'en' ? (info.en || info.tr) : (info.tr || info.en)) : '';
+        zoomDescEl.textContent = desc || '';
+
+        // Fiyat bilgisini de açıklamaya eklemek istersen (Opsiyonel):
+        const priceVal = mini.querySelector('.price').innerText;
+        if (priceVal) {
+          // Eğer açıklama varsa altına ekle, yoksa direkt fiyat yaz
+          zoomDescEl.textContent += zoomDescEl.textContent ? `\n\nFiyat: ${priceVal}` : `Fiyat: ${priceVal}`;
+        }
+
+        // Rozetler (Tags)
+        zoomTagsEl.innerHTML = '';
+        if (info && Array.isArray(info.tags) && info.tags.length) {
+          info.tags.forEach(t => {
+            const chip = document.createElement('span');
+            chip.className = 'chip';
+            chip.innerHTML = `
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="8"></circle>
+            </svg> ${t}`;
+            zoomTagsEl.appendChild(chip);
+          });
+          zoomTagsEl.hidden = false;
+        } else {
+          zoomTagsEl.hidden = true;
+        }
+
+        // 7. Zoom Penceresini Aç
+        zoom.removeAttribute('hidden');
+        document.documentElement.style.overflow = 'hidden';
+        requestAnimationFrame(() => zoom.classList.add('open'));
+      });
+    });
     // Kapatma
     function closeZoom() {
       zoom.classList.remove('open');
