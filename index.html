@@ -214,6 +214,7 @@
     /* LAYOUT */
     section {
       padding: 54px 18px
+        /* Navbar'ın arkasında kalmasını engeller */
     }
 
     .container {
@@ -1382,14 +1383,17 @@
     document.addEventListener('DOMContentLoaded', syncPrices);
     // setInterval(syncPrices, 10*60*1000); // istersen periyodik tazele
     // --- Basit i18n (TR/EN) ---
+    // --- Basit i18n (TR/EN) ---
     const i18n = {
       tr: {
         _metaTitle: "Hançerlioglu Katmer Künefe – Menü",
         _metaDesc: "Hançerlioglu Katmer Künefe: Katmer, Künefe, Kadayıf, Dondurma ve İçecekler.",
-        nav_katmer: "Katmer", nav_kunefe: "Künefe", nav_kadayif: "Kadayıf", nav_dondurma: "Dondurma", nav_icecek: "İçecek",
+        nav_katmer: "Katmer", nav_kunefe: "Künefe", nav_kadayif: "Kadayıf",
+        nav_baklava: "Baklava", nav_dondurma: "Dondurma", nav_kaymak: "Kaymak", nav_icecek: "İçecek",
         hero_tag: " Katmerden Künefeye, Baklavadan Kadayıfa… Şehrin en seçkin tatlılarını altın dokunuşlarla keşfedin.",
         cta: "Menüyü Gör", menu_title: "Menümüz",
-        badge_katmer: "Katmerler", badge_kunefe: "Künefeler", badge_kadayif: "Kadayıflar", badge_dondurma: "Dondurmalar", badge_icecek: "İçecekler",
+        badge_katmer: "Katmerler", badge_kunefe: "Künefeler", badge_kadayif: "Kadayıflar",
+        badge_baklava: "Baklavalar", badge_dondurma: "Dondurmalar", badge_kaymak: "Kaymak", badge_icecek: "İçecekler",
         contact: "İletişim", open_map: "Adres & konum için haritayı açın:", hours: "Çalışma Saatleri", hours_value: "Her gün: 10:00 – 01:00",
         pay_card: "Kart ile ödeme", pay_cash: "Nakit", pay_contactless: "Temassız", takeaway: "Paket servis var",
         call_btn: "Ara", instagram: "Instagram", whatsapp: "WhatsApp",
@@ -1399,10 +1403,12 @@
       en: {
         _metaTitle: "Hançerlioglu Katmer Kunefe – Menu",
         _metaDesc: "Hançerlioglu Katmer Kunefe: Katmer, Kunefe, Kadaif, Ice Cream and Drinks.",
-        nav_katmer: "Katmer", nav_kunefe: "Kunefe", nav_kadayif: "Kadaif", nav_dondurma: "Ice Cream", nav_icecek: "Drinks",
+        nav_katmer: "Katmer", nav_kunefe: "Kunefe", nav_kadayif: "Kadaif",
+        nav_baklava: "Baklava", nav_dondurma: "Ice Cream", nav_kaymak: "Clotted Cream", nav_icecek: "Drinks",
         hero_tag: "From katmer to kunefe, from baklava to kadaif… Discover the city’s finest desserts with a golden touch.",
         cta: "View Menu", menu_title: "Our Menu",
-        badge_katmer: "Katmers", badge_kunefe: "Kunefes", badge_kadayif: "Kadaif Desserts", badge_dondurma: "Ice Creams", badge_icecek: "Drinks",
+        badge_katmer: "Katmers", badge_kunefe: "Kunefes", badge_kadayif: "Kadaif Desserts",
+        badge_baklava: "Baklavas", badge_dondurma: "Ice Creams", badge_kaymak: "Clotted Cream", badge_icecek: "Drinks",
         contact: "Contact", open_map: "Open map for address & location:", hours: "Opening Hours", hours_value: "Every day: 10:00 – 01:00",
         pay_card: "Card payment", pay_cash: "Cash", pay_contactless: "Contactless", takeaway: "Takeaway available",
         call_btn: "Call", instagram: "Instagram", whatsapp: "WhatsApp",
@@ -1742,8 +1748,10 @@
       if (navLinks[0]) navLinks[0].textContent = i18n[lang].nav_katmer;
       if (navLinks[1]) navLinks[1].textContent = i18n[lang].nav_kunefe;
       if (navLinks[2]) navLinks[2].textContent = i18n[lang].nav_kadayif;
-      if (navLinks[3]) navLinks[3].textContent = i18n[lang].nav_dondurma;
-      if (navLinks[4]) navLinks[4].textContent = i18n[lang].nav_icecek;
+      if (navLinks[3]) navLinks[3].textContent = i18n[lang].nav_baklava;  // Eklendi
+      if (navLinks[4]) navLinks[4].textContent = i18n[lang].nav_dondurma;
+      if (navLinks[5]) navLinks[5].textContent = i18n[lang].nav_kaymak;   // Eklendi
+      if (navLinks[6]) navLinks[6].textContent = i18n[lang].nav_icecek;   // Sona kaydırıldı
 
       // Hero
       const tag = document.querySelector('.hero .tag');
@@ -1760,7 +1768,9 @@
         '#katmer .badge': 'badge_katmer',
         '#kunefe .badge': 'badge_kunefe',
         '#kadayif .badge': 'badge_kadayif',
+        '#baklava .badge': 'badge_baklava',
         '#dondurma .badge': 'badge_dondurma',
+        '#kaymak .badge': 'badge_kaymak',
         '#icecek .badge': 'badge_icecek'
       };
       Object.entries(badgeMap).forEach(([sel, key]) => {
