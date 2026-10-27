@@ -20,6 +20,8 @@
 * { box-sizing: border-box; }
 
 html {
+  max-width: 100%;
+  overflow-x: hidden;
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
@@ -27,7 +29,7 @@ html {
 
 body {
   margin: 0;
-  overflow-x: clip;
+  max-width: 100%;
   background:
     radial-gradient(900px 420px at 100% -10%, rgba(224, 177, 90, 0.16), transparent 55%),
     radial-gradient(680px 380px at -10% 8%, rgba(156, 176, 92, 0.08), transparent 50%),
@@ -290,6 +292,7 @@ a { color: var(--gold-2); }
   min-width: 0;
   overflow-x: auto;
   overscroll-behavior-x: contain;
+  contain: paint;
   padding: 4px 16px 6px;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
@@ -374,6 +377,7 @@ a { color: var(--gold-2); }
   min-width: 0;
   overflow-x: auto;
   overscroll-behavior-x: contain;
+  contain: paint;
   scroll-snap-type: x mandatory;
   padding: 4px 16px 8px;
   scrollbar-width: none;
@@ -401,6 +405,7 @@ a { color: var(--gold-2); }
 
 .feature-card {
   flex: 0 0 min(84%, 300px);
+  min-width: 0;
   scroll-snap-align: start;
   display: flex;
   flex-direction: column;
@@ -776,6 +781,9 @@ body.lock {
   position: fixed;
   left: 0;
   right: 0;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   bottom: 0;
   z-index: 70;
   display: flex;
@@ -957,6 +965,7 @@ body.lock {
   max-width: 100%;
   min-width: 0;
   overflow-x: auto;
+  contain: paint;
   padding-bottom: 4px;
   scrollbar-width: none;
 }
