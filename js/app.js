@@ -10,10 +10,6 @@ const FILTERS = [
   ['chef', 'filterChef'],
   ['new', 'filterNew'],
   ['sharing', 'filterSharing'],
-  ['chocolate', 'filterChocolate'],
-  ['pistachio', 'filterPistachio'],
-  ['cold', 'filterCold'],
-  ['light', 'filterLight'],
   ['vegetarian', 'filterVegetarian'],
   ['spicy', 'filterSpicy']
 ];
